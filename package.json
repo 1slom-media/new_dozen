@@ -6,6 +6,7 @@
     "scripts": {
         "build": "npx tsc",
         "start": "node dist/index.js",
+        "dozen":"npx tsc && node dist/index.js",
         "dev": "ts-node ./src/index.ts"
     },
     "dependencies": {
