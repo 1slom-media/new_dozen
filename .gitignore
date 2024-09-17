@@ -1,0 +1,9 @@
+node_modules
+tmp
+.env
+request.json
+request1.json
+request2.json
+request3.json
+response4.json
+categories.json

@@ -1,0 +1,31 @@
+export const STATUS_TEXT = {
+    new: 'Yangi',
+    ready: 'Tayyor',
+    onway: "Yo'lda",
+    delivered: 'Yetkazildi',
+    canceled: 'Bekor qilindi',
+    hold: 'Hold',
+    archived: 'Arxivlangan',
+    accepted: 'Qabul qilindi',
+    waiting: 'Kutilmoqda',
+    fulfilled: 'Bajarildi',
+    rejected: 'Rad etildi',
+};
+
+export const CMD_TEXT = {
+    balance: '💰 Balans',
+    statistcis: '📊 Statistika',
+    settings: '⚙️ Sozlamalar',
+    contact: '📞 Aloqa',
+    getpaid: '💸 Xisobni yechish',
+    paymentHistory: "⌛️ To'lovlar tarixi",
+    menu: '✅ Bosh menyu',
+    today: '♻️ Bugungi',
+    yesterday: '♻️ Kechagi',
+    week: '♻️ haftalik',
+    month: '♻️ Oylik',
+    all: '♻️ Jami',
+    id: '📡 ID ni topish',
+    confirm: '♻️ Tasdiqlash',
+    restart: "♻️ Bog'lanishni tekshirish",
+};
