@@ -38,7 +38,7 @@ const httpserver = http.createServer(ExpressApp.getServer);
 
 dbConnection();
 getEskizToken();
-// Bot.runBot();
+Bot.runBot();
 
 cron.schedule(`0 0 * * 0`, () => getEskizToken(), {
     scheduled: true,
