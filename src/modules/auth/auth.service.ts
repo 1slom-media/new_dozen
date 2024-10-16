@@ -226,6 +226,43 @@ export default class AuthService {
         return { message: 'Raqmingizga sms kod yuborildi!' };
     }
 
+    async SignWithPhoneSeller(phone: string) {
+        const operator = await this.userService.findOneForAuth(phone);
+        if (operator && !operator.isSeller)
+            throw new ErrorResponse(400, 'Siz seller emas ekansiz!');
+
+        if (operator?.status === 0) {
+            throw new ErrorResponse(400, 'Sizning raqamingiz bloklangan!');
+        }
+
+        var newCode: string = '';
+        while (newCode.length < 4) {
+            let randomNumber = Math.floor(Math.random() * 10);
+            if (randomNumber !== 0) {
+                newCode += randomNumber;
+            }
+        }
+
+        const user = await this.userService.findOneForAuth(phone);
+        if (!user) {
+            await this.userService.create({
+                phone,
+                smsCode: Number(newCode),
+            });
+        } else
+            await this.userService.update(user._id, {
+                smsCode: Number(newCode),
+            });
+        await sendSms(`Baroka.uz sayti uchun birmartalik tasdiqlash kodi - ${newCode}`, phone);
+
+        setTimeout(async () => {
+            await this.userService.update(user._id, {
+                smsCode: Math.floor(Math.random() * 100000),
+            });
+        }, 120000);
+        return { message: 'Raqmingizga sms kod yuborildi!' };
+    }
+
     async CheckCode(
         phone: string,
         code: number,

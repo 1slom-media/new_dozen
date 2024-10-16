@@ -28,6 +28,11 @@ export default class AuthRoute implements Routes {
             this.authController.SendSmsAdmin
         );
         this.router.post(
+            `${this.path}seller/login`,
+            validate(SignInDto, 'body', true),
+            this.authController.SendSmsSeller
+        );
+        this.router.post(
             `${this.path}sign/phone`,
             requestChecker,
             validate(AuthDto, 'body', true),

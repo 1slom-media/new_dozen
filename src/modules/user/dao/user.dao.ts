@@ -42,7 +42,7 @@ export default class UserDao {
     ) {
         // Create the base query to check for either isSeller or isAdmin
         const query: any = {
-            $or: [{ isSeller: true }, { isAdmin: true }],
+            isOperator: { $ne: true }
         };
         
         // If a filter is provided, add another condition for name or phone

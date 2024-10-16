@@ -107,11 +107,23 @@ export default class AuthController {
         next: NextFunction
     ): Promise<void> => {
         try {
-            const { phone }: AuthDto = req.body;
-            console.log(phone,"ph");
-            
-
+            const { phone }: AuthDto = req.body;      
             const data = await this.authService.SignWithPhoneAdmin(phone);
+
+            res.status(200).json(data);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public SendSmsSeller = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const { phone }: AuthDto = req.body;      
+            const data = await this.authService.SignWithPhoneSeller(phone);
 
             res.status(200).json(data);
         } catch (error) {
