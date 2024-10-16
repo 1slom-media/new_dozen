@@ -27,6 +27,8 @@ class App {
             cors({
                 origin: [
                     'http://localhost:3000',
+                    'http://localhost:3001',
+                    'http://localhost:3002',
                     origins.origin1,
                     origins.origin2,
                     origins.origin3,

@@ -22,6 +22,15 @@ export default class UserService {
         return this.userDao.getAll(operator, '-updatedAt', filter, page, limit);
     }
 
+    async getAllSellers(
+        seller: boolean,
+        filter: string,
+        page: number,
+        limit: number
+    ) {
+        return this.userDao.getSellers(seller, '-updatedAt', filter, page, limit);
+    }
+
     async findOne(id: string, select?: string) {
         const foundUser: IUser = await this.userDao.findOne(id, select);
 
@@ -89,6 +98,7 @@ export default class UserService {
             email,
             surname,
             nickname,
+            isSeller,
         }: UpdateUserDto
     ) {
         const foundUser: IUser = await this.userDao.findOne(id);
@@ -120,6 +130,7 @@ export default class UserService {
             email,
             surname,
             nickname,
+            isSeller
         });
     }
 

@@ -65,6 +65,11 @@ export default class ProductRoute implements Routes {
             this.productController.getAllProductsAdmin //tugadi
         );
         this.router.get(
+            `${this.path}/seller/all`,
+            protect,
+            this.productController.getAllProductsSeller //tugadi
+        );
+        this.router.get(
             `${this.path}/delivered`,
             this.productController.getProductsDelivered // orders schemaga bogliq tugamagan hali
         );
@@ -76,14 +81,12 @@ export default class ProductRoute implements Routes {
         this.router.get(
             `${this.path}/skus/:number`,
             protect,
-            isAdmin,
             validate(ValidateParamsNumberDTO, 'params'), // tugagan
             this.productController.getForupdateSku
         );
         this.router.put(
             `${this.path}/skus`,
             protect,
-            isAdmin,
             validate(UpdateSkuDto, 'body', true), // tugagan
             this.productController.updateSkus
         );
@@ -95,14 +98,12 @@ export default class ProductRoute implements Routes {
         this.router.post(
             `${this.path}/`,
             protect,
-            isAdmin,
             validate(CreateProductDto, 'body', true), // tugagan
             this.productController.create
         );
         this.router.put(
             `${this.path}/:number`,
             protect,
-            isAdmin,
             validate(ValidateParamsNumberDTO, 'params'), // tugagan
             validate(UpdateProductDto, 'body', true),
             this.productController.update
@@ -110,14 +111,12 @@ export default class ProductRoute implements Routes {
         this.router.delete(
             `${this.path}/:number`,
             protect,
-            isAdmin,
             validate(ValidateParamsNumberDTO, 'params'), //tugagan
             this.productController.delete
         );
         this.router.post(
             `/fileupload`,
             protect,
-            isAdmin,
             imageValidationMiddleware('images'), //tugagan
             videoValidationMiddleware(),
             this.productController.uploadFile

@@ -6,6 +6,7 @@ export interface IUser {
     nickname?: string;
     email?: string;
     isAdmin?: boolean;
+    isSeller?: boolean;
     balance?: number;
     deposit?: number;
     paid?: number;

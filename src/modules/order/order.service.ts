@@ -54,6 +54,7 @@ export default class OrderService {
                 const product = await this.variantService.findOne(
                     item.variantId
                 );
+                const findProduct= await this.productService.findOne(item.variantId);
 
                 values.referal_price =
                     values.referal_price &&
@@ -62,6 +63,14 @@ export default class OrderService {
                         : values.referal_price;
 
                 item.price = product?.purchasePrice;
+                values.sellerPrice=product.sellerPrice;
+                values.operatorPrice=product.operatorPrice;
+                if(findProduct.seller){
+                    values.seller=findProduct.seller
+                }
+                if(findProduct.admin){
+                    values.admin=findProduct.admin
+                }
             }
 
             resolve(values);
@@ -110,6 +119,7 @@ export default class OrderService {
             newOrderItems.push({
                 quantity: 1,
                 variantId: variantId,
+                position:order.orderItems[0].position
             });
         }
 
@@ -222,6 +232,28 @@ export default class OrderService {
             sTime,
             eTime,
             region
+        );
+
+        return orders;
+    }
+    
+    async getAllOrderStatusSeller(
+        status: string,
+        page?: number,
+        limit?: number,
+        sTime?: Date,
+        eTime?: Date,
+        region?: string,
+        sellerId?:string
+    ) {
+        const orders = await this.ordersDao.getAllOrderStatusSeller(
+            status,
+            page,
+            limit,
+            sTime,
+            eTime,
+            region,
+            sellerId
         );
 
         return orders;

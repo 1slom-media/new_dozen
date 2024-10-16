@@ -16,6 +16,13 @@ const productSchema = new mongoose.Schema<IProduct>(
             ref: 'categories',
             required: [true, 'Kategoriyani tanlang'],
         },
+        seller: {
+            type: mongoose.Schema.Types.ObjectId
+        },
+        admin: {
+            type: mongoose.Schema.Types.ObjectId
+        },
+        positions: [{ type: String }],
         images: [
             {
                 image: {

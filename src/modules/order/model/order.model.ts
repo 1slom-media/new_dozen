@@ -14,8 +14,11 @@ const orderSchema = new mongoose.Schema<IOrder>(
                 price: {
                     type: Number,
                 },
+                position: {
+                    type: String,
+                },
                 variantId: {
-                    type: Schema.Types.Number,
+                    type: Schema.Types.Number,  
                     required: [true, 'Maxsulotni kiriting'],
                 },
             },
@@ -42,6 +45,20 @@ const orderSchema = new mongoose.Schema<IOrder>(
         streamId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'stream',
+        },
+        sellerPrice:{
+            type:Number,
+            default:0
+        },
+        operatorPrice:{
+            type:Number,
+            default:0
+        },
+        seller: {
+            type: mongoose.Schema.Types.ObjectId
+        },
+        admin: {
+            type: mongoose.Schema.Types.ObjectId
         },
         status: {
             type: String,

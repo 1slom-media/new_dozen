@@ -108,6 +108,8 @@ export default class AuthController {
     ): Promise<void> => {
         try {
             const { phone }: AuthDto = req.body;
+            console.log(phone,"ph");
+            
 
             const data = await this.authService.SignWithPhoneAdmin(phone);
 

@@ -39,6 +39,7 @@ const userSchema = new mongoose.Schema<IUser>(
         soldProCount: { type: Number, default: 0 },
         telegramID: { type: Number },
         isOperator: { type: Boolean, default: false },
+        isSeller: { type: Boolean, default: false },
         banner: { type: String },
         uid: { type: Number, unique: true },
         bitcoin: { type: Number, default: 0 },

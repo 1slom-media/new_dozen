@@ -40,6 +40,9 @@ export class UpdateUserDto implements IUser {
     isAdmin?: boolean;
 
     @IsBooleanString()
+    isSeller?: boolean;
+
+    @IsBooleanString()
     isOperator?: boolean;
 
     @IsNumberString()

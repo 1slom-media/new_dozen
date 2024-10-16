@@ -1,6 +1,7 @@
 node_modules
 tmp
 .env
+.dist
 request.json
 request1.json
 request2.json

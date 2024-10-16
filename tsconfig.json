@@ -12,10 +12,11 @@
         "moduleResolution": "node",
         "module": "commonjs",
         "pretty": true,
-        "sourceMap": true,
+        "sourceMap": false,
         "declaration": true,
         "outDir": "dist",
-        "allowJs": true,
+        "incremental": true,
+        "allowJs": false,
         "noEmit": false,
         "esModuleInterop": true,
         "resolveJsonModule": true,
@@ -25,5 +26,5 @@
         }
     },
     "include": ["src/**/*.ts", "src/**/*.json", ".env"],
-    "exclude": ["node_modules", "src/http", "src/logs", "src/tests"]
+    "exclude": ["node_modules","src/logs", "src/tests"]
 }

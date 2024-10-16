@@ -12,7 +12,9 @@ import OrderService from '../order/order.service';
 import { BrandsService } from '../brands/brands.service';
 import SubFeaturesService from '../subfeatures/subfeatures.service';
 import { imageUploader, videoUploader } from '../shared/utils/imageUploader';
+import UserDao from '../user/dao/user.dao';
 
+const usersDao = new UserDao();
 export default class ProductController {
     private productService = new ProductService();
     private orderService = new OrderService();
@@ -25,10 +27,19 @@ export default class ProductController {
         next: NextFunction
     ): Promise<void> => {
         try {
-            const productData: CreateProductDto = req.body;
-
+            let productData: CreateProductDto = req.body;
+            const {user_id}=req.body
+            const user = await usersDao.findOne(user_id);
+            
+            if(user.isSeller==true){
+                productData.seller=user._id;
+            }
+            if(user.isAdmin==true){
+                productData.admin=user._id
+            }
+            
             const data = await this.productService.create(productData);
-
+            
             res.status(201).json({
                 success: true,
                 data,
@@ -286,6 +297,35 @@ export default class ProductController {
             const { limit, page } = extractQuery(query).sorts;
 
             const data = await this.productService.getAllProductsAdmin(
+                filter,
+                page,
+                limit
+            );
+
+            res.status(200).json(data);
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public getAllProductsSeller = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const { query } = req;
+            const { filter }: ISearchQuery = query;
+            const { limit, page } = extractQuery(query).sorts;
+            const {user_id}=req.body
+            const user = await usersDao.findOne(user_id);
+            
+            let sellerId;
+            if(user.isSeller==true){
+                sellerId=user._id;
+            }
+            const data = await this.productService.getAllProductsSeller(
+                sellerId,
                 filter,
                 page,
                 limit

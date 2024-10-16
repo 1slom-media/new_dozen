@@ -8,7 +8,7 @@ console.log(MONGO_URI, "mrr");
 export const dbConnection = () => {
   mongoose.set("strictQuery", true);
   mongoose
-    .connect(MONGO_URI, { ssl: true, sslValidate: false })
+    .connect(MONGO_URI)
     .then(async (data) => {
       console.log(`MongoDB connected with server: ${data.connection.host}`);
       createSmsSettings();

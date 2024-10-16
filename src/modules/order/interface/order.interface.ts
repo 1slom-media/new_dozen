@@ -1,6 +1,7 @@
 export interface IOrderItem {
     quantity: number;
     variantId: number;
+    position?:String;
     price?: number;
 }
 export interface IOrder {
@@ -16,6 +17,8 @@ export interface IOrder {
     extra_info?: string;
     message?: string;
     referal_price?: number;
+    sellerPrice?: number;
+    operatorPrice?: number;
     prevStatus?: string;
     isTaken?: boolean;
     takenById?: any;
@@ -23,4 +26,6 @@ export interface IOrder {
     createdAt?: Date;
     updatedAt?: Date;
     user_ip?: string;
+    seller?:any;
+    admin?:any;
 }

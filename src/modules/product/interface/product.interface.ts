@@ -42,6 +42,8 @@ export interface ICharacteristcs {
 export interface IProduct {
     uid?: number;
     title?: { uz: string; ru: string; en: string };
+    seller?:any; 
+    admin?:any; 
     category?: number;
     description?: { uz: string; ru: string; en: string };
     blocked?: boolean;
@@ -50,6 +52,7 @@ export interface IProduct {
     allowMarket?: boolean;
     adult?: boolean;
     characteristics?: ICharacteristcs[];
+    positions?: string[];
     brand?: number;
     madeIn?: string;
     rating?: number;

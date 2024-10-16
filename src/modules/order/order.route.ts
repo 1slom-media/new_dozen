@@ -76,17 +76,20 @@ export default class OrderRoute implements Routes {
             isAdmin,
             this.orderController.getAllOrderStatusAdmin
         );
+        this.router.get(
+            `${this.path}/seller/getall`,
+            protect,
+            this.orderController.getAllOrderStatusSeller
+        );
         this.router.put(
             `${this.path}/admin/updateAll`,
             protect,
-            isAdmin,
             validate(UpdateOrderStatusAdminDto, 'body', true),
             this.orderController.updateOrderStatusAdmin
         );
         this.router.get(
             `${this.path}/admin/statistics`,
             protect,
-            isAdmin,
             this.orderController.statistics
         );
         this.router.get(
@@ -96,58 +99,54 @@ export default class OrderRoute implements Routes {
         this.router.get(
             `${this.path}/admin/ready`,
             protect,
-            isAdmin,
             this.orderController.getAllReady
         );
         this.router.get(
             `${this.path}/admin/week`,
             protect,
-            isAdmin,
             this.orderController.getWeekOrders
         );
         this.router.get(
             `${this.path}/admin/city`,
             protect,
-            isAdmin,
             this.orderController.getByCity
         );
         this.router.get(
             `${this.path}/admin-status`,
             protect,
-            isAdmin,
             this.orderController.getStatusCountOrder
+        );
+        this.router.get(
+            `${this.path}/admin-total-balance`,
+            protect,
+            this.orderController.getTotalBalance
         );
         this.router.get(
             `${this.path}/admin-search`,
             protect,
-            isAdmin,
             this.orderController.getAllSearchOrder
         );
         this.router.get(
             `${this.path}/admin/city/:number`,
             protect,
-            isAdmin,
             validate(ValidateParamsNumberDTO, 'params'),
             this.orderController.getRegionCountOrder
         );
         this.router.put(
             `${this.path}/admin/many`,
             protect,
-            isAdmin,
             validate(UpadetOrderAdminMany, 'body', true),
             this.orderController.updateOrderAdminMany
         );
         this.router.put(
             `${this.path}/admin/many/by-status`,
             protect,
-            isAdmin,
             validate(UpadetOrderAdminManyByStatus, 'body', true),
             this.orderController.updateOrderAdminManyByStatus
         );
         this.router.put(
             `${this.path}/admin/:id`,
             protect,
-            isAdmin,
             validate(ValidateParamsDTO, 'params'),
             validate(UpdateOrderAdminDto, 'body', true),
             this.orderController.updateOrderAdmin
@@ -155,7 +154,6 @@ export default class OrderRoute implements Routes {
         this.router.get(
             `${this.path}/:id`,
             protect,
-            isAdmin,
             validate(ValidateParamsDTO, 'params'),
             this.orderController.getOneOrder
         );

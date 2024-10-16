@@ -295,6 +295,16 @@ export class CreateProductDto implements IProduct {
     title: any;
 
     @IsDefined()
+    @IsString()
+    @IsOptional()
+    seller?: string;
+
+    @IsDefined()
+    @IsString()
+    @IsOptional()
+    admin?: string;
+
+    @IsDefined()
     @IsNotEmpty()
     @IsNumber()
     category: number;
@@ -323,6 +333,9 @@ export class CreateProductDto implements IProduct {
     characteristics?: ICharacteristcs[];
 
     @IsOptional()
+    positions?: string[];
+
+    @IsOptional()
     @DescriptionValidator()
     sizesDescription?: { uz: string; ru: string; en: string };
 
@@ -345,6 +358,9 @@ export class UpdateProductDto implements IProduct {
     @IsNotEmpty()
     @DescriptionValidator()
     description: any;
+
+    @IsOptional()
+    positions?: string[];
 
     @IsOptional()
     @IsBoolean()

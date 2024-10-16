@@ -1,3 +1,4 @@
+import { OrderModel } from '../../order/model/order.model';
 import { BotModel } from '../../botSettings/model/botSettings.model';
 import { UpdateUserDto } from '../dto/user.dto';
 import { IUser } from '../interface/user.interface';
@@ -39,7 +40,45 @@ export default class UserDao {
         page: number,
         limit: number
     ) {
-        const pageCount = await UserModel.find({ isOperator: operator })
+        // Create the base query to check for either isSeller or isAdmin
+        const query: any = {
+            $or: [{ isSeller: true }, { isAdmin: true }],
+        };
+        
+        // If a filter is provided, add another condition for name or phone
+        if (filter) {
+            query.$and = [
+                {
+                    $or: [
+                        { name: { $regex: filter, $options: 'i' } },
+                        { phone: { $regex: filter, $options: 'i' } },
+                    ],
+                },
+            ];
+        }
+        
+        // Count total number of matching users
+        const pageCount = await UserModel.find(query).countDocuments();
+        
+        // Fetch the users with pagination
+        const users = await UserModel.find(query)
+            .limit(limit)
+            .skip((page - 1) * limit)
+            .select(select);
+        return { users, pageCount: Math.ceil(pageCount / limit) };
+    }
+    
+    
+    
+    
+    async getSellers(
+        seller: boolean,
+        select: string = '-password',
+        filter: string,
+        page: number,
+        limit: number
+    ) {
+        const pageCount = await UserModel.find({ isSeller: seller })
             .or([
                 {
                     name: {
@@ -55,7 +94,7 @@ export default class UserDao {
                 },
             ])
             .count();
-        const users = await UserModel.find({ isOperator: operator })
+        const users = await UserModel.find({ isSeller: seller })
             .or([
                 {
                     name: {
@@ -76,6 +115,7 @@ export default class UserDao {
         return { users, pageCount: Math.ceil(pageCount / limit) };
     }
 
+
     async findOne(userId: string, select: string = '-password') {
         if (select) {
             return await UserModel.findOne({ _id: userId }).select(select);
@@ -94,6 +134,47 @@ export default class UserDao {
 
         return user;
     }
+
+    async balance(userId: string) {
+        const user = await UserModel.findOne({_id: userId});
+        if (!user) throw new Error('User not found');
+    
+        let balance: number = 0;
+    
+        if (user.isAdmin === true) {
+            const newOrders = await OrderModel.find({status: "new", admin: userId});
+            const deleteOrdersAdmin = await OrderModel.find({status: "canceled", admin: userId});
+            newOrders.forEach(order => {
+                balance += order.referal_price || 0;
+            });
+            deleteOrdersAdmin.forEach(order => {
+                balance -= order.referal_price || 0;
+            });
+        }
+        if (user.isSeller === true) {
+            const newOrders = await OrderModel.find({status: "new", seller: userId});
+            const deleteOrders = await OrderModel.find({status: "canceled", seller: userId});
+            newOrders.forEach(order => {
+                balance += order.sellerPrice || 0;
+            });
+            deleteOrders.forEach(order => {
+                balance -= order.sellerPrice || 0;
+            });
+        }
+        if (user.isOperator === true) {
+            const newOrders = await OrderModel.find({status: "new", takenById: userId});
+            const deleteOrders = await OrderModel.find({status: "canceled", takenById: userId});
+            newOrders.forEach(order => {
+                balance += order.operatorPrice || 0;
+            });
+            deleteOrders.forEach(order => {
+                balance -= order.operatorPrice || 0; 
+            });
+        }
+    
+        return { user, balance };
+    }
+    
 
     async delete(userId: string) {
         const user = await UserModel.deleteOne({ _id: userId });

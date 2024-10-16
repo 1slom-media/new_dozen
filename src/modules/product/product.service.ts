@@ -29,6 +29,8 @@ export default class ProductService {
         sizesDescription,
         featureDescription,
         video,
+        seller,
+        positions
     }: IProduct) {
         var productCharacteristics = [];
         if (characteristics)
@@ -55,8 +57,11 @@ export default class ProductService {
             sizesDescription,
             featureDescription,
             video,
+            seller,
+            positions,
             blocked: true,
         });
+        
 
         if (characteristics.length) {
             const skus = characteristics.map((e) => e.values);
@@ -210,6 +215,9 @@ export default class ProductService {
                     blocked: sku?.blocked,
                     allowMarket: sku?.allowMarket,
                     purchasePrice: sku?.purchasePrice,
+                    sellerPrice:sku?.sellerPrice,
+                    comission:sku?.comission,
+                    operatorPrice:sku.operatorPrice,
                     skuTitle:
                         sku?.skuTitle && productSku
                             ? sku?.skuTitle.split('-')[0] +
@@ -300,6 +308,9 @@ export default class ProductService {
 
     async getAllProductsAdmin(filter?: string, page?: number, limit?: number) {
         return await this.productDao.getAllProductsAdmin(filter, page, limit);
+    }
+    async getAllProductsSeller(sellerId?: string,filter?: string, page?: number, limit?: number) {
+        return await this.productDao.getAllProductsSeller(sellerId,filter, page, limit);
     }
 
     async getCheapProductsBySettingsValue(

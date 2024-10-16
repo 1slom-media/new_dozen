@@ -37,10 +37,10 @@ export const protect = async (
             throw new ErrorResponse(401, 'Ruxsat berilmagan!');
 
         const user = await usersDao.findOne(decodedToken.user_id);
-
+        
         if (!user) throw new ErrorResponse(401, 'Foydalanuvchi mavjud emas');
 
-        req.body.user_id = user._id;
+        req.body.user_id = user._id;  
 
         next();
     } catch (error) {

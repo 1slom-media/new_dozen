@@ -238,9 +238,10 @@ export default class ProductDao {
                 },
             },
         ]);
-
+    
         return product[0];
-    } //tugadi
+    }
+     //tugadi
 
     async findOne(uid: number) {
         return await ProductModel.findOne({ uid });
@@ -274,6 +275,8 @@ export default class ProductDao {
                     'skuList.fullPrice': 1,
                     'skuList.boughtPrice': 1,
                     'skuList.referalPrice': 1,
+                    'skuList.sellerPrice': 1,
+                    'skuList.operatorPrice': 1,
                     'skuList.discountPrice': 1,
                     'skuList.purchasePrice': 1,
                     'skuList.blocked': 1,
@@ -407,6 +410,7 @@ export default class ProductDao {
                     rating: 1,
                     uid: 1,
                     reviewsAmount: 1,
+                    positions:1,
                     purchasePrice: {
                         $reduce: {
                             input: '$skus',
@@ -1428,6 +1432,136 @@ export default class ProductDao {
         const products = await ProductModel.aggregate([
             {
                 $match: {
+                    $or: [
+                        {
+                            'title.uz': {
+                                $regex: filter ? filter : '',
+                                $options: 'i',
+                            },
+                        },
+                        {
+                            'title.ru': {
+                                $regex: filter ? filter : '',
+                                $options: 'i',
+                            },
+                        },
+                        {
+                            'title.en': {
+                                $regex: filter ? filter : '',
+                                $options: 'i',
+                            },
+                        },
+                        {
+                            'description.uz': {
+                                $regex: filter ? filter : '',
+                                $options: 'i',
+                            },
+                        },
+                        {
+                            'description.ru': {
+                                $regex: filter ? filter : '',
+                                $options: 'i',
+                            },
+                        },
+                        {
+                            'description.en': {
+                                $regex: filter ? filter : '',
+                                $options: 'i',
+                            },
+                        },
+                    ],
+                },
+            },
+            {
+                $sort: {
+                    createdAt: -1,
+                },
+            },
+            {
+                $lookup: {
+                    from: 'categories',
+                    localField: 'category',
+                    foreignField: 'uid',
+                    as: 'category',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'skus',
+                    localField: 'uid',
+                    foreignField: 'productId',
+                    as: 'skus',
+                },
+            },
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+            {
+                $project: {
+                    _id: 0,
+                    uid: 1,
+                    title: 1,
+                    createdAt: 1,
+                    referalPrice: {
+                        $reduce: {
+                            input: '$skus',
+                            initialValue: 0,
+                            in: {
+                                $min: [
+                                    '$$value.referalPrice',
+                                    '$$this.referalPrice',
+                                ],
+                            },
+                        },
+                    },
+                    purchasePrice: {
+                        $reduce: {
+                            input: '$skus',
+                            initialValue: 0,
+                            in: {
+                                $min: [
+                                    '$$value.purchasePrice',
+                                    '$$this.purchasePrice',
+                                ],
+                            },
+                        },
+                    },
+                    totalAvailableAmount: {
+                        $reduce: {
+                            input: '$skus',
+                            initialValue: 0,
+                            in: {
+                                $min: ['$$value', '$$this.availableAmount'],
+                            },
+                        },
+                    },
+                    category: { $first: '$category.title' },
+                    image: { $arrayElemAt: ['$images.image.80.high', 0] },
+                    blocked: 1,
+                    allowMarket: 1,
+                },
+            },
+        ]);
+        return { products, countPage: Math.ceil(countProduct / limit) };
+    } //tugadi
+
+    // sellerrr
+    async getAllProductsSeller(sellerId?: string,filter?: string, page?: number, limit?: number) { 
+        const sellerFilter = sellerId ? { seller: new mongoose.Types.ObjectId(sellerId) } : {};
+        const countProduct = await ProductModel.find({
+            ...sellerFilter,
+            $or: [
+                { 'title.uz': { $regex: filter || '', $options: 'i' } },
+                { 'title.ru': { $regex: filter || '', $options: 'i' } },
+                { 'title.en': { $regex: filter || '', $options: 'i' } },
+                { 'description.uz': { $regex: filter || '', $options: 'i' } },
+                { 'description.ru': { $regex: filter || '', $options: 'i' } },
+                { 'description.en': { $regex: filter || '', $options: 'i' } },
+            ],
+        }).count();
+        const products = await ProductModel.aggregate([
+            {
+                $match: {
+                    ...sellerFilter, 
                     $or: [
                         {
                             'title.uz': {

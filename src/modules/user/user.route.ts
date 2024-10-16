@@ -24,12 +24,23 @@ export default class UserRoute implements Routes {
             isAdmin,
             this.userController.getAllUsers
         );
+        this.router.get(
+            `${this.path}/balance`,
+            protect,
+            this.userController.getUsersBalance
+        );
         // which get all operators for admin
         this.router.get(
             `${this.path}/operator`,
             protect,
             isAdmin,
             this.userController.getAllOperators
+        );
+        this.router.get(
+            `${this.path}/seller`,
+            protect,
+            isAdmin,
+            this.userController.getAllSellers
         );
         this.router.get(
             `${this.path}/operator/statistics`,

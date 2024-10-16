@@ -7,12 +7,14 @@ import OrderService from '../order/order.service';
 import extractQuery from '../shared/utils/extractQuery';
 import TokenService from '../auth/providers/token.service';
 import { ITokenPayload } from '../auth/interface/auth.interface';
+import UserDao from './dao/user.dao';
 
 export default class UserController {
     private userService = new UserService();
     private orderService = new OrderService();
     private jwtService = new TokenService();
-
+    private userDao = new UserDao();
+    
     public create = async (
         req: Request,
         res: Response,
@@ -70,6 +72,26 @@ export default class UserController {
             const { filter }: ISearchQuery = query;
             const { limit, page } = extractQuery(query).sorts;
             const data = await this.userService.getAll(
+                true,
+                filter,
+                page,
+                limit
+            );
+            res.status(200).json(data);
+        } catch (error) {
+            next(error);
+        }
+    };
+    public getAllSellers = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const { query } = req;
+            const { filter }: ISearchQuery = query;
+            const { limit, page } = extractQuery(query).sorts;
+            const data = await this.userService.getAllSellers(
                 true,
                 filter,
                 page,
@@ -263,6 +285,20 @@ export default class UserController {
             );
 
             res.status(200).json({ user, ...data });
+        } catch (error) {
+            next(error);
+        }
+    };
+
+    public getUsersBalance = async (
+        req: Request,
+        res: Response,
+        next: NextFunction
+    ): Promise<void> => {
+        try {
+            const {user_id}=req.body
+            const data = await this.userDao.balance(user_id);
+            res.status(200).json(data);
         } catch (error) {
             next(error);
         }

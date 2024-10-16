@@ -24,6 +24,15 @@ export default class OrderDao {
         //     select: 'name price',
         // });
     }
+    async totalBalance() {
+        const orders = await OrderModel.find({ status: { $ne: 'canceled' } });
+        let totalBalance:number=0;
+        
+        orders.forEach(order=>{
+            totalBalance+=order.referal_price || 0
+        })
+        return [{balance:totalBalance}];
+    }
 
     async getAll(userId: string, page: number, limit: number) {
         const countPage = await OrderModel.find({
@@ -298,34 +307,35 @@ export default class OrderDao {
                                                             vars: {
                                                                 product: {
                                                                     $first: {
-                                                                        $filter:
-                                                                            {
-                                                                                input: '$products',
-                                                                                as: 'product',
-                                                                                cond: {
-                                                                                    $eq: [
-                                                                                        '$$product.uid',
-                                                                                        '$$variant.productId',
-                                                                                    ],
-                                                                                },
+                                                                        $filter: {
+                                                                            input: '$products',
+                                                                            as: 'product',
+                                                                            cond: {
+                                                                                $eq: [
+                                                                                    '$$product.uid',
+                                                                                    '$$variant.productId',
+                                                                                ],
                                                                             },
+                                                                        },
                                                                     },
                                                                 },
                                                             },
                                                             in: {
                                                                 title: '$$product.title',
                                                                 image: {
-                                                                    $arrayElemAt:
-                                                                        [
-                                                                            '$$product.images.image.540.high',
-                                                                            0,
-                                                                        ],
+                                                                    $arrayElemAt: [
+                                                                        '$$product.images.image.540.high',
+                                                                        0,
+                                                                    ],
                                                                 },
                                                             },
                                                         },
                                                     },
                                                 },
                                             },
+                                        },
+                                        {
+                                            position: '$$orderItem.position', // Position qo'shilmoqda
                                         },
                                     ],
                                 },
@@ -340,6 +350,7 @@ export default class OrderDao {
                         'orderItems.quantity': 1,
                         'orderItems.price': 1,
                         'orderItems.product': 1,
+                        'orderItems.position': 1, // Positionni projectda qaytaramiz
                         'operator.name': 1,
                         'operator.phone': 1,
                         name: 1,
@@ -354,6 +365,7 @@ export default class OrderDao {
                 { $skip: (page - 1) * limit },
                 { $limit: limit },
             ]);
+            
 
             return {
                 orders,
@@ -437,34 +449,35 @@ export default class OrderDao {
                                                             vars: {
                                                                 product: {
                                                                     $first: {
-                                                                        $filter:
-                                                                            {
-                                                                                input: '$products',
-                                                                                as: 'product',
-                                                                                cond: {
-                                                                                    $eq: [
-                                                                                        '$$product.uid',
-                                                                                        '$$variant.productId',
-                                                                                    ],
-                                                                                },
+                                                                        $filter: {
+                                                                            input: '$products',
+                                                                            as: 'product',
+                                                                            cond: {
+                                                                                $eq: [
+                                                                                    '$$product.uid',
+                                                                                    '$$variant.productId',
+                                                                                ],
                                                                             },
+                                                                        },
                                                                     },
                                                                 },
                                                             },
                                                             in: {
                                                                 title: '$$product.title',
                                                                 image: {
-                                                                    $arrayElemAt:
-                                                                        [
-                                                                            '$$product.images.image.540.high',
-                                                                            0,
-                                                                        ],
+                                                                    $arrayElemAt: [
+                                                                        '$$product.images.image.540.high',
+                                                                        0,
+                                                                    ],
                                                                 },
                                                             },
                                                         },
                                                     },
                                                 },
                                             },
+                                        },
+                                        {
+                                            position: '$$orderItem.position', // Position qo'shilmoqda
                                         },
                                     ],
                                 },
@@ -479,6 +492,7 @@ export default class OrderDao {
                         'orderItems.quantity': 1,
                         'orderItems.price': 1,
                         'orderItems.product': 1,
+                        'orderItems.position': 1, // Positionni projectda qaytaramiz
                         'operator.name': 1,
                         'operator.phone': 1,
                         name: 1,
@@ -493,6 +507,7 @@ export default class OrderDao {
                 { $skip: (page - 1) * limit },
                 { $limit: limit },
             ]);
+            
 
             return {
                 orders,
@@ -570,34 +585,35 @@ export default class OrderDao {
                                                             vars: {
                                                                 product: {
                                                                     $first: {
-                                                                        $filter:
-                                                                            {
-                                                                                input: '$products',
-                                                                                as: 'product',
-                                                                                cond: {
-                                                                                    $eq: [
-                                                                                        '$$product.uid',
-                                                                                        '$$variant.productId',
-                                                                                    ],
-                                                                                },
+                                                                        $filter: {
+                                                                            input: '$products',
+                                                                            as: 'product',
+                                                                            cond: {
+                                                                                $eq: [
+                                                                                    '$$product.uid',
+                                                                                    '$$variant.productId',
+                                                                                ],
                                                                             },
+                                                                        },
                                                                     },
                                                                 },
                                                             },
                                                             in: {
                                                                 title: '$$product.title',
                                                                 image: {
-                                                                    $arrayElemAt:
-                                                                        [
-                                                                            '$$product.images.image.540.high',
-                                                                            0,
-                                                                        ],
+                                                                    $arrayElemAt: [
+                                                                        '$$product.images.image.540.high',
+                                                                        0,
+                                                                    ],
                                                                 },
                                                             },
                                                         },
                                                     },
                                                 },
                                             },
+                                        },
+                                        {
+                                            position: '$$orderItem.position', // Position qo'shilmoqda
                                         },
                                     ],
                                 },
@@ -612,6 +628,580 @@ export default class OrderDao {
                         'orderItems.quantity': 1,
                         'orderItems.price': 1,
                         'orderItems.product': 1,
+                        'orderItems.position': 1, // Positionni projectda qaytaramiz
+                        'operator.name': 1,
+                        'operator.phone': 1,
+                        name: 1,
+                        phone: 1,
+                        city_id: 1,
+                        fullPrice: 1,
+                        isTaken: 1,
+                        createdAt: 1,
+                    },
+                },
+                { $sort: { createdAt: -1 } },
+                { $skip: (page - 1) * limit },
+                { $limit: limit },
+            ]);
+            
+
+            return {
+                orders,
+                countPage: Math.ceil(countPage / limit),
+                size: countPage,
+            };
+        }
+
+        const countPage = await OrderModel.find({
+            status,
+        }).count();
+        const orders = await OrderModel.aggregate([
+            {
+                $match: {
+                    status
+                },
+            },
+            {
+                $lookup: {
+                    from: 'skus',
+                    localField: 'orderItems.variantId',
+                    foreignField: 'uid',
+                    as: 'variants',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'products',
+                    localField: 'variants.productId',
+                    foreignField: 'uid',
+                    as: 'products',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'takenById',
+                    foreignField: '_id',
+                    as: 'operator',
+                },
+            },
+            {
+                $addFields: {
+                    orderItems: {
+                        $map: {
+                            input: '$orderItems',
+                            as: 'orderItem',
+                            in: {
+                                $mergeObjects: [
+                                    '$$orderItem',
+                                    {
+                                        product: {
+                                            $let: {
+                                                vars: {
+                                                    variant: {
+                                                        $first: {
+                                                            $filter: {
+                                                                input: '$variants',
+                                                                as: 'variant',
+                                                                cond: {
+                                                                    $eq: [
+                                                                        '$$variant.uid',
+                                                                        '$$orderItem.variantId',
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                                in: {
+                                                    $let: {
+                                                        vars: {
+                                                            product: {
+                                                                $first: {
+                                                                    $filter: {
+                                                                        input: '$products',
+                                                                        as: 'product',
+                                                                        cond: {
+                                                                            $eq: [
+                                                                                '$$product.uid',
+                                                                                '$$variant.productId',
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                        in: {
+                                                            title: '$$product.title',
+                                                            image: {
+                                                                $arrayElemAt: [
+                                                                    '$$product.images.image.540.high',
+                                                                    0,
+                                                                ],
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                    },
+                                    {
+                                        position: '$$orderItem.position', // Position qo'shilmoqda
+                                    },
+                                ],
+                            },
+                        },
+                    },
+                    operator: { $first: '$operator' },
+                },
+            },
+            {
+                $project: {
+                    number: 1,
+                    'orderItems.quantity': 1,
+                    'orderItems.price': 1,
+                    'orderItems.product': 1,
+                    'orderItems.position': 1,
+                    'operator.name': 1,
+                    'operator.phone': 1,
+                    name: 1,
+                    phone: 1,
+                    city_id: 1,
+                    fullPrice: 1,
+                    isTaken: 1,
+                    createdAt: 1,
+                },
+            },
+            { $sort: { createdAt: -1 } },
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ]);
+        
+
+        return {
+            orders,
+            countPage: Math.ceil(countPage / limit),
+            size: countPage,
+        };
+    }
+
+    async getAllOrderStatusSeller(
+        status: string,
+        page: number,
+        limit: number,
+        startTime?: Date,
+        endTime?: Date,
+        region?: string,
+        sellerId?:string,
+    ) {
+        if(!sellerId){
+            return [ ]
+        }
+        const sellerFilter = sellerId ? { seller: new mongoose.Types.ObjectId(sellerId) } : {};
+        
+        if (startTime && endTime && region) {
+            const countPage = await OrderModel.find({
+                ...sellerFilter,
+                status,
+                city_id: { $in: region.split(',').map((e) => +e) },
+                $and: [
+                    { createdAt: { $gt: new Date(startTime) } },
+                    { createdAt: { $lt: new Date(endTime) } },
+                ],
+            }).count();
+            const orders = await OrderModel.aggregate([
+                {
+                    $match: {
+                        ...sellerFilter,
+                        status,
+                        city_id: { $in: region.split(',').map((e) => +e) },
+                        $and: [
+                            { createdAt: { $gt: new Date(startTime) } },
+                            { createdAt: { $lt: new Date(endTime) } },
+                        ],
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'skus',
+                        localField: 'orderItems.variantId',
+                        foreignField: 'uid',
+                        as: 'variants',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'variants.productId',
+                        foreignField: 'uid',
+                        as: 'products',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'takenById',
+                        foreignField: '_id',
+                        as: 'operator',
+                    },
+                },
+                {
+                    $addFields: {
+                        orderItems: {
+                            $map: {
+                                input: '$orderItems',
+                                as: 'orderItem',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$orderItem',
+                                        {
+                                            product: {
+                                                $let: {
+                                                    vars: {
+                                                        variant: {
+                                                            $first: {
+                                                                $filter: {
+                                                                    input: '$variants',
+                                                                    as: 'variant',
+                                                                    cond: {
+                                                                        $eq: [
+                                                                            '$$variant.uid',
+                                                                            '$$orderItem.variantId',
+                                                                        ],
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    in: {
+                                                        $let: {
+                                                            vars: {
+                                                                product: {
+                                                                    $first: {
+                                                                        $filter: {
+                                                                            input: '$products',
+                                                                            as: 'product',
+                                                                            cond: {
+                                                                                $eq: [
+                                                                                    '$$product.uid',
+                                                                                    '$$variant.productId',
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                            in: {
+                                                                title: '$$product.title',
+                                                                image: {
+                                                                    $arrayElemAt: [
+                                                                        '$$product.images.image.540.high',
+                                                                        0,
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            position: '$$orderItem.position', // Position qo'shilmoqda
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        operator: { $first: '$operator' },
+                    },
+                },
+                {
+                    $project: {
+                        number: 1,
+                        'orderItems.quantity': 1,
+                        'orderItems.price': 1,
+                        'orderItems.product': 1,
+                        'orderItems.position': 1, // Positionni projectda qaytaramiz
+                        'operator.name': 1,
+                        'operator.phone': 1,
+                        name: 1,
+                        phone: 1,
+                        city_id: 1,
+                        fullPrice: 1,
+                        isTaken: 1,
+                        createdAt: 1,
+                    },
+                },
+                { $sort: { createdAt: -1 } },
+                { $skip: (page - 1) * limit },
+                { $limit: limit },
+            ]);
+
+            return {
+                orders,
+                countPage: Math.ceil(countPage / limit),
+                size: countPage,
+            };
+        }
+
+        if (startTime && endTime) {
+            const countPage = await OrderModel.find({
+                ...sellerFilter,
+                status,
+                $and: [
+                    { createdAt: { $gt: new Date(startTime) } },
+                    { createdAt: { $lt: new Date(endTime) } },
+                ],
+            }).count();
+            const orders = await OrderModel.aggregate([
+                {
+                    $match: {
+                        ...sellerFilter,
+                        status,
+                        $and: [
+                            { createdAt: { $gt: new Date(startTime) } },
+                            { createdAt: { $lt: new Date(endTime) } },
+                        ],
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'skus',
+                        localField: 'orderItems.variantId',
+                        foreignField: 'uid',
+                        as: 'variants',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'variants.productId',
+                        foreignField: 'uid',
+                        as: 'products',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'takenById',
+                        foreignField: '_id',
+                        as: 'operator',
+                    },
+                },
+                {
+                    $addFields: {
+                        orderItems: {
+                            $map: {
+                                input: '$orderItems',
+                                as: 'orderItem',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$orderItem',
+                                        {
+                                            product: {
+                                                $let: {
+                                                    vars: {
+                                                        variant: {
+                                                            $first: {
+                                                                $filter: {
+                                                                    input: '$variants',
+                                                                    as: 'variant',
+                                                                    cond: {
+                                                                        $eq: [
+                                                                            '$$variant.uid',
+                                                                            '$$orderItem.variantId',
+                                                                        ],
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    in: {
+                                                        $let: {
+                                                            vars: {
+                                                                product: {
+                                                                    $first: {
+                                                                        $filter: {
+                                                                            input: '$products',
+                                                                            as: 'product',
+                                                                            cond: {
+                                                                                $eq: [
+                                                                                    '$$product.uid',
+                                                                                    '$$variant.productId',
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                            in: {
+                                                                title: '$$product.title',
+                                                                image: {
+                                                                    $arrayElemAt: [
+                                                                        '$$product.images.image.540.high',
+                                                                        0,
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            position: '$$orderItem.position', // Position qo'shilmoqda
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        operator: { $first: '$operator' },
+                    },
+                },
+                {
+                    $project: {
+                        number: 1,
+                        'orderItems.quantity': 1,
+                        'orderItems.price': 1,
+                        'orderItems.product': 1,
+                        'orderItems.position': 1, // Positionni projectda qaytaramiz
+                        'operator.name': 1,
+                        'operator.phone': 1,
+                        name: 1,
+                        phone: 1,
+                        city_id: 1,
+                        fullPrice: 1,
+                        isTaken: 1,
+                        createdAt: 1,
+                    },
+                },
+                { $sort: { createdAt: -1 } },
+                { $skip: (page - 1) * limit },
+                { $limit: limit },
+            ]);
+
+            return {
+                orders,
+                countPage: Math.ceil(countPage / limit),
+                size: countPage,
+            };
+        }
+
+        if (region) {
+            const countPage = await OrderModel.find({
+                ...sellerFilter,
+                status,
+                city_id: { $in: region.split(',').map((e) => +e) },
+            }).count();
+            const orders = await OrderModel.aggregate([
+                {
+                    $match: {
+                        ...sellerFilter,
+                        status,
+                        city_id: { $in: region.split(',').map((e) => +e) },
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'skus',
+                        localField: 'orderItems.variantId',
+                        foreignField: 'uid',
+                        as: 'variants',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'products',
+                        localField: 'variants.productId',
+                        foreignField: 'uid',
+                        as: 'products',
+                    },
+                },
+                {
+                    $lookup: {
+                        from: 'users',
+                        localField: 'takenById',
+                        foreignField: '_id',
+                        as: 'operator',
+                    },
+                },
+                {
+                    $addFields: {
+                        orderItems: {
+                            $map: {
+                                input: '$orderItems',
+                                as: 'orderItem',
+                                in: {
+                                    $mergeObjects: [
+                                        '$$orderItem',
+                                        {
+                                            product: {
+                                                $let: {
+                                                    vars: {
+                                                        variant: {
+                                                            $first: {
+                                                                $filter: {
+                                                                    input: '$variants',
+                                                                    as: 'variant',
+                                                                    cond: {
+                                                                        $eq: [
+                                                                            '$$variant.uid',
+                                                                            '$$orderItem.variantId',
+                                                                        ],
+                                                                    },
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                    in: {
+                                                        $let: {
+                                                            vars: {
+                                                                product: {
+                                                                    $first: {
+                                                                        $filter: {
+                                                                            input: '$products',
+                                                                            as: 'product',
+                                                                            cond: {
+                                                                                $eq: [
+                                                                                    '$$product.uid',
+                                                                                    '$$variant.productId',
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    },
+                                                                },
+                                                            },
+                                                            in: {
+                                                                title: '$$product.title',
+                                                                image: {
+                                                                    $arrayElemAt: [
+                                                                        '$$product.images.image.540.high',
+                                                                        0,
+                                                                    ],
+                                                                },
+                                                            },
+                                                        },
+                                                    },
+                                                },
+                                            },
+                                        },
+                                        {
+                                            position: '$$orderItem.position', // Position qo'shilmoqda
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                        operator: { $first: '$operator' },
+                    },
+                },
+                {
+                    $project: {
+                        number: 1,
+                        'orderItems.quantity': 1,
+                        'orderItems.price': 1,
+                        'orderItems.product': 1,
+                        'orderItems.position': 1, // Positionni projectda qaytaramiz
                         'operator.name': 1,
                         'operator.phone': 1,
                         name: 1,
@@ -635,11 +1225,13 @@ export default class OrderDao {
         }
 
         const countPage = await OrderModel.find({
+            ...sellerFilter,
             status,
         }).count();
         const orders = await OrderModel.aggregate([
             {
                 $match: {
+                    ...sellerFilter,
                     status,
                 },
             },
@@ -727,6 +1319,9 @@ export default class OrderDao {
                                             },
                                         },
                                     },
+                                    {
+                                        position: '$$orderItem.position', // Position qo'shilmoqda
+                                    },
                                 ],
                             },
                         },
@@ -740,6 +1335,7 @@ export default class OrderDao {
                     'orderItems.quantity': 1,
                     'orderItems.price': 1,
                     'orderItems.product': 1,
+                    'orderItems.position': 1, // Positionni projectda qaytaramiz
                     'operator.name': 1,
                     'operator.phone': 1,
                     name: 1,
@@ -864,10 +1460,7 @@ export default class OrderDao {
                                                                 input: '$variants',
                                                                 as: 'variant',
                                                                 cond: {
-                                                                    $eq: [
-                                                                        '$$variant.uid',
-                                                                        '$$orderItem.variantId',
-                                                                    ],
+                                                                    $eq: ['$$variant.uid', '$$orderItem.variantId'],
                                                                 },
                                                             },
                                                         },
@@ -882,10 +1475,7 @@ export default class OrderDao {
                                                                         input: '$products',
                                                                         as: 'product',
                                                                         cond: {
-                                                                            $eq: [
-                                                                                '$$product.uid',
-                                                                                '$$variant.productId',
-                                                                            ],
+                                                                            $eq: ['$$product.uid', '$$variant.productId'],
                                                                         },
                                                                     },
                                                                 },
@@ -895,10 +1485,7 @@ export default class OrderDao {
                                                                     input: '$variants',
                                                                     as: 'sku',
                                                                     cond: {
-                                                                        $eq: [
-                                                                            '$$sku.productId',
-                                                                            '$$variant.productId',
-                                                                        ],
+                                                                        $eq: ['$$sku.productId', '$$variant.productId'],
                                                                     },
                                                                 },
                                                             },
@@ -906,60 +1493,47 @@ export default class OrderDao {
                                                         in: {
                                                             title: '$$product.title',
                                                             image: {
-                                                                $arrayElemAt: [
-                                                                    '$$product.images.image.540.high',
-                                                                    0,
-                                                                ],
+                                                                $arrayElemAt: ['$$product.images.image.540.high', 0],
                                                             },
-                                                            skuList:
-                                                                '$$skuList',
+                                                            skuList: '$$skuList',
                                                             characteristics: {
                                                                 $let: {
                                                                     vars: {
-                                                                        characteristics:
-                                                                            {
-                                                                                $filter:
-                                                                                    {
-                                                                                        input: '$characteristics',
-                                                                                        as: 'character',
-                                                                                        cond: {
-                                                                                            $in: [
-                                                                                                '$$character.uid',
-                                                                                                '$$product.characteristics.uid',
-                                                                                            ],
-                                                                                        },
-                                                                                    },
+                                                                        characteristics: {
+                                                                            $filter: {
+                                                                                input: '$characteristics',
+                                                                                as: 'character',
+                                                                                cond: {
+                                                                                    $in: ['$$character.uid', '$$product.characteristics.uid'],
+                                                                                },
                                                                             },
+                                                                        },
                                                                     },
                                                                     in: {
                                                                         $map: {
                                                                             input: '$$characteristics',
                                                                             as: 'character',
                                                                             in: {
-                                                                                $mergeObjects:
-                                                                                    [
-                                                                                        '$$character',
-                                                                                        {
-                                                                                            values: {
-                                                                                                $filter:
-                                                                                                    {
-                                                                                                        input: '$features',
-                                                                                                        as: 'value',
-                                                                                                        cond: {
-                                                                                                            $eq: [
-                                                                                                                '$$value.charId',
-                                                                                                                '$$character.uid',
-                                                                                                            ],
-                                                                                                        },
-                                                                                                    },
+                                                                                $mergeObjects: [
+                                                                                    '$$character',
+                                                                                    {
+                                                                                        values: {
+                                                                                            $filter: {
+                                                                                                input: '$features',
+                                                                                                as: 'value',
+                                                                                                cond: {
+                                                                                                    $eq: ['$$value.charId', '$$character.uid'],
+                                                                                                },
                                                                                             },
                                                                                         },
-                                                                                    ],
+                                                                                    },
+                                                                                ],
                                                                             },
                                                                         },
                                                                     },
                                                                 },
                                                             },
+                                                            position: '$$orderItem.position', // Position qo'shilmoqda
                                                         },
                                                     },
                                                 },
@@ -969,6 +1543,8 @@ export default class OrderDao {
                                 ],
                             },
                         },
+                        
+                        
                     },
                 },
             },
@@ -1116,120 +1692,66 @@ export default class OrderDao {
             size: countPage[0] ? countPage[0]['Total'] : 0,
         };
     }
+// hsjjsjskjs
+async getOperatorOrderProduct(operatorId: string, status: string) {
+    const matchStage: mongoose.PipelineStage.Match = {
+        $match: {
+            takenById: new mongoose.Types.ObjectId(operatorId),
+            ...(status ? { status } : {}), // Only add status if it is provided
+        },
+    };
 
-    async getOperatorOrderProduct(operatorId: string, status: string) {
-        if (status)
-            return await OrderModel.aggregate([
-                {
-                    $addFields: {
-                        orderItems: { $first: '$orderItems' },
-                    },
-                },
-                {
-                    $match: {
-                        takenById: new mongoose.Types.ObjectId(operatorId),
-                        status,
-                    },
-                },
-                {
-                    $lookup: {
-                        from: 'skus',
-                        localField: 'orderItems.variantId',
-                        foreignField: 'uid',
-                        as: 'variant',
-                    },
-                },
-                {
-                    $lookup: {
-                        from: 'products',
-                        localField: 'variant.productId',
-                        foreignField: 'uid',
-                        as: 'product',
-                    },
-                },
-                {
-                    $unwind: {
-                        path: '$product',
-                        preserveNullAndEmptyArrays: true,
-                    },
-                },
-                {
-                    $project: {
-                        name: 1,
-                        productTitle: '$product.title',
-                        number: 1,
-                        city_id: 1,
-                        image: { $first: '$product.images' },
-                        status: 1,
-                        takenById: 1,
-                    },
-                },
-                { $sort: { createdAt: -1 } },
-            ]);
+    // Create the base pipeline
+    const pipeline: mongoose.PipelineStage[] = [
+        {
+            $unwind: {
+                path: '$orderItems',
+                preserveNullAndEmptyArrays: true, // This keeps the order if there are no order items
+            },
+        },
+        matchStage,
+        {
+            $lookup: {
+                from: 'skus',
+                localField: 'orderItems.variantId',
+                foreignField: 'uid',
+                as: 'variant',
+            },
+        },
+        {
+            $lookup: {
+                from: 'products',
+                localField: 'variant.productId',
+                foreignField: 'uid',
+                as: 'product',
+            },
+        },
+        {
+            $unwind: {
+                path: '$product',
+                preserveNullAndEmptyArrays: true,
+            },
+        },
+        {
+            $project: {
+                name: 1,
+                productTitle: '$product.title',
+                position: '$orderItems.position', // Extracting position from orderItems
+                number: 1,
+                city_id: 1,
+                image: { $first: '$product.images' },
+                status: 1,
+                takenById: 1,
+            },
+        },
+        { $sort: { createdAt: -1 } },
+    ];
 
-        return await OrderModel.aggregate([
-            {
-                $addFields: {
-                    orderItems: { $first: '$orderItems' },
-                },
-            },
-            {
-                $match: {
-                    takenById: new mongoose.Types.ObjectId(operatorId),
-                },
-            },
-            {
-                $lookup: {
-                    from: 'skus',
-                    localField: 'orderItems.variantId',
-                    foreignField: 'uid',
-                    as: 'variant',
-                },
-            },
-            {
-                $lookup: {
-                    from: 'products',
-                    localField: 'variant.productId',
-                    foreignField: 'uid',
-                    as: 'product',
-                },
-            },
-            {
-                $addFields: {
-                    productTitle: {
-                        $first: '$product.title',
-                    },
-                    image: {
-                        $first: '$product.images',
-                    },
-                },
-            },
-            {
-                $unwind: {
-                    path: '$productTitle',
-                    preserveNullAndEmptyArrays: true,
-                },
-            },
-            {
-                $unwind: {
-                    path: '$image',
-                    preserveNullAndEmptyArrays: true,
-                },
-            },
-            {
-                $project: {
-                    name: 1,
-                    productTitle: 1,
-                    number: 1,
-                    city_id: 1,
-                    image: 1,
-                    status: 1,
-                    takenById: 1,
-                },
-            },
-            { $sort: { createdAt: -1 } },
-        ]);
-    }
+    return await OrderModel.aggregate(pipeline);
+}
+
+
+    
 
     async getOperatorOrderProductCount(operatorId: string) {
         var arr = [];
@@ -2012,14 +2534,15 @@ export default class OrderDao {
     async getAllByStatus(status: string, isTaken: boolean = false) {
         return await OrderModel.aggregate([
             {
-                $addFields: {
-                    orderItems: { $first: '$orderItems' },
-                },
-            },
-            {
                 $match: {
                     status,
                     isTaken,
+                },
+            },
+            {
+                $unwind: {
+                    path: '$orderItems',
+                    preserveNullAndEmptyArrays: true, // This keeps the order if there are no order items
                 },
             },
             {
@@ -2055,6 +2578,7 @@ export default class OrderDao {
                 $project: {
                     name: 1,
                     productTitle: 1,
+                    position: '$orderItems.position', // Accessing position directly
                     number: 1,
                     city_id: 1,
                     image: { $first: '$product.images' },
@@ -2064,6 +2588,8 @@ export default class OrderDao {
             { $sort: { createdAt: -1 } },
         ]);
     }
+    
+    
 
     async getWithNumber(operatorId: string, number: number) {
         const order = await OrderModel.aggregate([
