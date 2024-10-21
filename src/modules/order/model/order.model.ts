@@ -54,6 +54,10 @@ const orderSchema = new mongoose.Schema<IOrder>(
             type:Number,
             default:0
         },
+        adminPrice:{
+            type:Number,
+            default:0
+        },
         seller: {
             type: mongoose.Schema.Types.ObjectId
         },

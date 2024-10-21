@@ -3,7 +3,6 @@ import { MONGO_URI } from "../config/conf";
 import { createSmsSettings } from "../modules/shared/utils/createSmsService";
 import { ProductModel } from "../modules/product/model/product.model";
 import { CategoryModel } from "../modules/category/model/category.model";
-console.log(MONGO_URI, "mrr");
 
 export const dbConnection = () => {
   mongoose.set("strictQuery", true);
@@ -14,6 +13,15 @@ export const dbConnection = () => {
       createSmsSettings();
 
       const usersCollection = mongoose.connection.db.collection("users");
+
+      // Eski 'email_1' indeksini o'chirish
+      await mongoose.connection.db.collection("users").dropIndex("email_1");
+
+      // Yangi partial index yaratish
+      await mongoose.connection.db.collection("users").createIndex(
+        { email: 1 },
+        { unique: true, partialFilterExpression: { email: { $type: "string" } }, name: "email_partial_string" } // Indeksga nom berish
+      );
 
       // Kolleksiya indekslarini olish
       const indexes = await usersCollection.indexes();

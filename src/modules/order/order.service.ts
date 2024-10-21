@@ -65,6 +65,7 @@ export default class OrderService {
                 item.price = product?.purchasePrice;
                 values.sellerPrice=product.sellerPrice;
                 values.operatorPrice=product.operatorPrice;
+                values.adminPrice=product.adminPrice
                 if(findProduct.seller){
                     values.seller=findProduct.seller
                 }

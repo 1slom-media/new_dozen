@@ -138,6 +138,17 @@ export default class UserDao {
         if (!user) throw new Error('User not found');
     
         let balance: number = 0;
+
+        if(user.phone=="+998996098937"){
+            const newOrders = await OrderModel.find({status: "new", admin: userId});
+            const deleteOrdersAdmin = await OrderModel.find({status: "canceled", admin: userId});
+            newOrders.forEach(order => {
+                balance += order.adminPrice || 0;
+            });
+            deleteOrdersAdmin.forEach(order => {
+                balance -= order.adminPrice || 0;
+            });
+        }
     
         if (user.isAdmin === true) {
             const newOrders = await OrderModel.find({status: "new", admin: userId});

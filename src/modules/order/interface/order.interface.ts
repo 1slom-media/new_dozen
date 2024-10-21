@@ -18,6 +18,7 @@ export interface IOrder {
     message?: string;
     referal_price?: number;
     sellerPrice?: number;
+    adminPrice?: number;
     operatorPrice?: number;
     prevStatus?: string;
     isTaken?: boolean;

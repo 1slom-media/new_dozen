@@ -216,7 +216,7 @@ export default class ProductService {
                     allowMarket: sku?.allowMarket,
                     purchasePrice: sku?.purchasePrice,
                     sellerPrice:sku?.sellerPrice,
-                    comission:sku?.comission,
+                    adminPrice:sku?.adminPrice,
                     operatorPrice:sku.operatorPrice,
                     skuTitle:
                         sku?.skuTitle && productSku

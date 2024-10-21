@@ -9,7 +9,7 @@ export interface ISku {
     referalPrice?: number;
     sellerPrice?:number;
     operatorPrice?:number;
-    comission?:number;
+    adminPrice?:number;
     discountPrice?: number;
     barcode?: number;
     characteristicsTitle?: string;
@@ -31,7 +31,7 @@ export interface IUpdateSku {
     boughtPrice?: number;
     referalPrice?: number;
     sellerPrice?:number;
-    comission?:number;
+    adminPrice?:number;
     operatorPrice?:number;
     discountPrice?: number;
     quantitySold?: number;

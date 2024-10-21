@@ -13,7 +13,7 @@ const skuSchema = new mongoose.Schema<ISku>({
     boughtPrice: { type: Number, default: 0 },
     referalPrice: { type: Number, default: 0 },
     sellerPrice: { type: Number, default: 0 },
-    comission: { type: Number, default: 0 },
+    adminPrice: { type: Number, default: 0 },
     operatorPrice: { type: Number, default: 0 },
     discountPrice: { type: Number, default: 0 },
     purchasePrice: { type: Number, default: 0 },
