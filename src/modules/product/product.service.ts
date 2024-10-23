@@ -243,7 +243,7 @@ export default class ProductService {
         page?: number,
         limit?: number,
         uid?: number
-    ) {
+    ) { 
         return this.productDao.getAllForMarket(filter, page, limit);
     }
 

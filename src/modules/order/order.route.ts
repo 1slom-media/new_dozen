@@ -117,6 +117,11 @@ export default class OrderRoute implements Routes {
             this.orderController.getStatusCountOrder
         );
         this.router.get(
+            `${this.path}/seller-status`,
+            protect,
+            this.orderController.getStatusCountOrderSeller
+        );
+        this.router.get(
             `${this.path}/admin-total-balance`,
             protect,
             this.orderController.getTotalBalance

@@ -376,6 +376,25 @@ export default class OrderService {
 
         return orderCount;
     }
+    async sellerOrderCount(userId?: string) {
+        let orderCount = {
+            new: 0,
+            ready: 0,
+            onway: 0,
+            delivered: 0,
+            canceled: 0,
+            hold: 0,
+            archived: 0,
+            pending: 0,
+        };
+        const userOrders = await this.ordersDao.getOrderWithNameSeller(userId);
+
+        userOrders.forEach((order) => {
+            orderCount[order.status] += 1;
+        });
+
+        return orderCount;
+    }
 
     async operatorOrderCount(userId?: string) {
         let orderCount = {

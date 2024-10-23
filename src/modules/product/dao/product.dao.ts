@@ -613,6 +613,8 @@ export default class ProductDao {
         limit?: number,
         uid?: number
     ) {
+        console.log(uid,"uid");
+        
         if (uid) {
             const countProduct = await ProductModel.aggregate([
                 {
@@ -906,6 +908,7 @@ export default class ProductDao {
                 },
             },
         ]);
+        
 
         return {
             products,

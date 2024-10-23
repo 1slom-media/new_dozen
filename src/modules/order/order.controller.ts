@@ -246,7 +246,6 @@ export default class OrderController {
         extractQuery(query).sorts;
       const { user_id } = req.body;
       const user = await usersDao.findOne(user_id);
-      console.log(user,"us");
       
       let sellerId;
       if (user.isSeller == true) {
@@ -396,6 +395,23 @@ export default class OrderController {
   ): Promise<void> => {
     try {
       const data = await this.orderService.userOrderCount();
+
+      res.status(200).json(data);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getStatusCountOrderSeller = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> => {
+    try {
+      const { user_id } = req.body;
+      console.log(user_id,"id");
+      
+      const data = await this.orderService.sellerOrderCount(user_id);
 
       res.status(200).json(data);
     } catch (error) {
