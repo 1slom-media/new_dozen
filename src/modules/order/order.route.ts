@@ -19,7 +19,6 @@ import {
     UpdateOrderStatusAdminDto,
 } from './dto/order.dto';
 import { requestChecker } from '../shared/middlewares/requestCheker';
-import { requestBanner } from '../shared/middlewares/requestBanner';
 
 export default class OrderRoute implements Routes {
     public path = '/order';
@@ -48,7 +47,6 @@ export default class OrderRoute implements Routes {
         );
         this.router.post(
             `${this.path}/add`,
-            requestBanner,
             requestChecker,
             validate(CreateOrderDto, 'body', true), //tugadi
             this.orderController.create
